@@ -135,6 +135,7 @@ function endpointBodyTemplate(path) {
           schema-description-expanded = "${this.schemaDescriptionExpanded}"
           allow-schema-description-expand-toggle = "${this.allowSchemaDescriptionExpandToggle}"
           schema-hide-read-only = "${this.schemaHideReadOnly}"
+          show-examples = "${this.showExamples}"
           fetch-credentials = "${this.fetchCredentials}"
           exportparts="btn btn-fill btn-outline btn-try"
         > </api-request>
@@ -153,6 +154,7 @@ function endpointBodyTemplate(path) {
         schema-description-expanded = "${this.schemaDescriptionExpanded}"
         allow-schema-description-expand-toggle = "${this.allowSchemaDescriptionExpandToggle}"
         schema-hide-write-only = "${this.schemaHideWriteOnly}"
+        show-examples = "${this.showExamples}"
         selected-status = "${Object.keys(path.responses || {})[0] || ''}"
         exportparts = "btn--resp btn-fill--resp btn-outline--resp"
       > </api-response>

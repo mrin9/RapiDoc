@@ -54,6 +54,7 @@ export default class ApiRequest extends LitElement {
       renderStyle: { type: String, attribute: 'render-style' },
       schemaStyle: { type: String, attribute: 'schema-style' },
       activeSchemaTab: { type: String, attribute: 'active-schema-tab' },
+      showExamples: { type: String, attribute: 'show-examples' },
       schemaExpandLevel: { type: Number, attribute: 'schema-expand-level' },
       schemaDescriptionExpanded: { type: String, attribute: 'schema-description-expanded' },
       allowSchemaDescriptionExpandToggle: { type: String, attribute: 'allow-schema-description-expand-toggle' },
@@ -599,7 +600,10 @@ export default class ApiRequest extends LitElement {
             <div class="tab-panel col" style="border-width:0 0 1px 0;">
               <div class="tab-buttons row" @click="${(e) => { if (e.target.tagName.toLowerCase() === 'button') { this.activeSchemaTab = e.target.dataset.tab; } }}">
                 <button class="tab-btn ${this.activeSchemaTab !== 'example' ? 'active' : ''}"   data-tab = 'schema'>SCHEMA</button>
-                <button class="tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>EXAMPLE </button>
+                ${this.showExamples === 'true'
+                  ? html`<button class="tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>EXAMPLE </button>`
+                  : ''
+                }
               </div>
               ${this.activeSchemaTab === 'example'
                 ? html`<div class="tab-content col"> ${reqBodyExampleHtml}</div>`
@@ -630,7 +634,7 @@ export default class ApiRequest extends LitElement {
     return html`
       <div class="tab-panel row" style="min-height:220px; border-left: 6px solid var(--light-border-color); align-items: stretch;">
         <div style="width:24px; background-color:var(--light-border-color)">
-          <div class="row" style="flex-direction:row-reverse; width:160px; height:24px; transform:rotate(270deg) translateX(-160px); transform-origin:top left; display:block;" @click="${(e) => {
+          <div class="row" style="flex-direction:row-reverse; width:${this.showExamples === 'true' ? '160px' : '90px'}; height:24px; transform:rotate(270deg) translateX(-${this.showExamples === 'true' ? '160px' : '90px'}); transform-origin:top left; display:block;" @click="${(e) => {
           if (e.target.classList.contains('v-tab-btn')) {
             const tab = e.target.dataset.tab;
             if (tab) {
@@ -648,7 +652,10 @@ export default class ApiRequest extends LitElement {
           if (e.target.tagName.toLowerCase() === 'button') { this.activeSchemaTab = e.target.dataset.tab; }
         }}">
           <button class="v-tab-btn ${this.activeSchemaTab !== 'example' ? 'active' : ''}" data-tab = 'schema'>SCHEMA</button>
-          <button class="v-tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>EXAMPLE</button>
+          ${this.showExamples === 'true'
+            ? html`<button class="v-tab-btn ${this.activeSchemaTab === 'example' ? 'active' : ''}" data-tab = 'example'>EXAMPLE</button>`
+            : ''
+          }
         </div>
       </div>
       ${html`
@@ -661,22 +668,24 @@ export default class ApiRequest extends LitElement {
           > </schema-tree>
         </div>`
       }
-      ${html`
-        <div class="tab-content col" data-tab = 'example' style="display:${this.activeSchemaTab === 'example' ? 'block' : 'none'}; padding-left:5px; width:100%"> 
-          <textarea 
-            class = "textarea"
-            part = "textarea textarea-param"
-            style = "width:100%; border:none; resize:vertical;" 
-            data-array = "false" 
-            data-ptype = "${mimeType.includes('form-urlencode') ? 'form-urlencode' : 'form-data'}"
-            data-pname = "${fieldName}"
-            data-example = "${formdataPartExample[0]?.exampleValue || ''}"
-            .textContent = "${this.fillRequestFieldsWithExample === 'true' ? formdataPartExample[0].exampleValue : ''}"
-            spellcheck = "false"
-          ></textarea>
-          <!-- This textarea(hidden) is to store the original example value, in focused mode on navbar change it is used to update the example text -->
-          <textarea data-pname = "hidden-${fieldName}" data-ptype = "${mimeType.includes('form-urlencode') ? 'hidden-form-urlencode' : 'hidden-form-data'}" class="is-hidden" style="display:none">${formdataPartExample[0].exampleValue}</textarea>
-        </div>`
+      ${this.showExamples === 'true'
+        ? html`
+          <div class="tab-content col" data-tab = 'example' style="display:${this.activeSchemaTab === 'example' ? 'block' : 'none'}; padding-left:5px; width:100%">
+            <textarea
+              class = "textarea"
+              part = "textarea textarea-param"
+              style = "width:100%; border:none; resize:vertical;"
+              data-array = "false"
+              data-ptype = "${mimeType.includes('form-urlencode') ? 'form-urlencode' : 'form-data'}"
+              data-pname = "${fieldName}"
+              data-example = "${formdataPartExample[0]?.exampleValue || ''}"
+              .textContent = "${this.fillRequestFieldsWithExample === 'true' ? formdataPartExample[0].exampleValue : ''}"
+              spellcheck = "false"
+            ></textarea>
+            <!-- This textarea(hidden) is to store the original example value, in focused mode on navbar change it is used to update the example text -->
+            <textarea data-pname = "hidden-${fieldName}" data-ptype = "${mimeType.includes('form-urlencode') ? 'hidden-form-urlencode' : 'hidden-form-data'}" class="is-hidden" style="display:none">${formdataPartExample[0].exampleValue}</textarea>
+          </div>`
+        : ''
       }
       </div>
     `;
