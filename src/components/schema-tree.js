@@ -186,7 +186,7 @@ export default class SchemaTree extends LitElement {
             ${data['::type'] === 'xxx-of-option' || data['::type'] === 'xxx-of-array' || key.startsWith('::OPTION')
               ? html`<span class='key-label xxx-of-key'>${keyLabel}</span><span class="xxx-of-descr">${keyDescr}</span>`
               : keyLabel.endsWith('*')
-                ? html`<span class="key-label">${keyLabel.substring(0, keyLabel.length - 1)}</span><span style='color:var(--red);'>*</span>`
+                ? html`<span class="key-label">${keyLabel.substring(0, keyLabel.length - 1)}</span><span style='color:var(--red);'>*</span>:`
                 : keyLabel === '::props' || keyLabel === '::ARRAY~OF'
                   ? ''
                   : schemaLevel > 0
