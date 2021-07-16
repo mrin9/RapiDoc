@@ -687,6 +687,9 @@ export default class ApiRequest extends LitElement {
     if (schema.properties) {
       for (const fieldName in schema.properties) {
         const fieldSchema = schema.properties[fieldName];
+        if (fieldSchema.readOnly) {
+          continue;
+        }
         const fieldExamples = fieldSchema.examples || fieldSchema.example || '';
         const fieldType = fieldSchema.type;
         const paramSchema = getTypeInfo(fieldSchema);
